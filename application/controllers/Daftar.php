@@ -13,8 +13,50 @@ class Daftar extends CI_Controller{
      */
     function index()
     {
-        redirect('daftar/ceknisn');
+        $this->load->view('daftar/index');
     } 
+
+    function step1()
+    {
+        $nisn =  $this->input->post('nisn');
+        $data['casis'] = $this->Daftar_model->get_casis($nisn);
+        $data['pendaftar'] = $this->Daftar_model->get_pendaftar($nisn);
+        if($_POST) {
+            if($nisn=='' || !isset($nisn))
+            {
+                $data['error'] = TRUE;
+                $data['msg'] = "<strong>Anda Harus Memasukkan NISN</strong> untuk melanjutkan proses pendaftaran ini";
+            }
+            else if(isset($data['pendaftar']['nisn'])) 
+            {
+                $data['error'] = TRUE;
+                $data['msg'] = "<strong>NISN Anda Sudah Digunakan Untuk Mendaftar Sebagai Calon Siswa Baru!</strong><br />Jika anda tidak merasa mendaftarkannya, Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a>";
+            }
+            else if(isset($data['casis']['nisn']))
+            {
+                $this->session->set_userdata('nisn', $nisn);
+                redirect('daftar/step2');
+            } 
+            
+            else 
+            {
+                $data['error'] = TRUE;
+                $data['msg'] = "<strong>NISN Anda Tidak Ditemukan di Database Kami!</strong><br /> Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a> Untuk Memverifikasi NISN Anda.";
+            }
+        }
+        $this->load->view('daftar/step1');
+    }
+    
+    function step2()
+    {
+        $this->load->view('daftar/step2');
+    }
+
+    function step3()
+    {
+        $this->load->view('daftar/step3');
+    }
+
     function ceknisn()
     {
         $nisn =  $this->input->post('nisn');
