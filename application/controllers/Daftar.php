@@ -13,8 +13,7 @@ class Daftar extends CI_Controller{
      */
     function index()
     {
-        $data = array('tes' => 'tes');
-        $this->load->view('daftar/index',$data);
+        redirect('daftar/ceknisn');
     } 
     function ceknisn()
     {
@@ -25,12 +24,12 @@ class Daftar extends CI_Controller{
             if($nisn=='' || !isset($nisn))
             {
                 $data['error'] = TRUE;
-                $data['msg'] = "<strong>Anda Harus Memasukkan NISN!</strong> Untuk dapat melanjutkan proses pendaftaran ini";
+                $data['msg'] = "<strong>Anda Harus Memasukkan NISN</strong> untuk melanjutkan proses pendaftaran ini";
             }
             else if(isset($data['pendaftar']['nisn'])) 
             {
                 $data['error'] = TRUE;
-                $data['msg'] = "<strong>NISN Anda Sudah Digunakan Untuk Mendaftar Sebagai Calon Siswa Baru!</strong><br />Jika anda tidak merasa mendaftarkannya, silahkan hubungi nomor WA ....";
+                $data['msg'] = "<strong>NISN Anda Sudah Digunakan Untuk Mendaftar Sebagai Calon Siswa Baru!</strong><br />Jika anda tidak merasa mendaftarkannya, Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a>";
             }
             else if(isset($data['casis']['nisn']))
             {
@@ -41,7 +40,7 @@ class Daftar extends CI_Controller{
             else 
             {
                 $data['error'] = TRUE;
-                $data['msg'] = "<strong>NISN Anda Tidak Ditemukan di Database Kami!</strong><br />Silahkan hubungi nomor WA .... Untuk Memverifikasi NISN Anda.";
+                $data['msg'] = "<strong>NISN Anda Tidak Ditemukan di Database Kami!</strong><br /> Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a> Untuk Memverifikasi NISN Anda.";
             }
         }
         $this->load->view('daftar/ceknisn',$data);
@@ -55,7 +54,6 @@ class Daftar extends CI_Controller{
         {
             $this->load->library('form_validation');
             $this->form_validation->set_rules('nisn','NISN','required');
-            
             $this->form_validation->set_rules('desa','Alamat Kab/Kota/Distrik/Desa','required');
             $this->form_validation->set_rules('namaayah','Nama Ayah','required');
             $this->form_validation->set_rules('alamatlengkap','Alamat Lengkap','required');
