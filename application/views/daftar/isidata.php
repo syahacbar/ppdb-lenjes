@@ -181,7 +181,7 @@
 		    <span class="input-group-text"> <i class="fa fa-building"></i> </span>
 		 </div>
          <select name="asalsekolah" class="form-control select2" id="asalsekolah" style="width: 40%;">
-		    <option selected="">Ketik Untuk Mencari Sekolah Tujuan</option>
+		    <option selected="">Asal Sekolah</option>
             <?php foreach($sql_asalsekolah as $sd) { ?>
             <option value="<?php echo $sd['namasekolah'];?>"><?php echo $sd['namasekolah'];?></option>
             <?php } ?>
