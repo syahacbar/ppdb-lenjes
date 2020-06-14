@@ -22,6 +22,7 @@ class Daftar extends CI_Controller{
         $data['casis'] = $this->Daftar_model->get_casis($nisn);
         $data['pendaftar'] = $this->Daftar_model->get_pendaftar($nisn);
         if($_POST) {
+            /*
             if($nisn=='' || !isset($nisn))
             {
                 $data['error'] = TRUE;
@@ -43,6 +44,8 @@ class Daftar extends CI_Controller{
                 $data['error'] = TRUE;
                 $data['msg'] = "<strong>NISN Anda Tidak Ditemukan di Database Kami!</strong><br /> Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a> Untuk Memverifikasi NISN Anda.";
             }
+            */
+            redirect('daftar/step2')
         }
         $this->load->view('daftar/step1');
     }
