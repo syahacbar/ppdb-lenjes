@@ -54,9 +54,9 @@
         <select name="sekolahtujuan" class="form-control select2" id="sekolahtujuan" style="width: 90%;">
 		    <option selected="">Ketik Untuk Mencari Sekolah Tujuan</option>
             <?php foreach($sql_sekolahtujuan as $smp) { ?>
-      <option value="<?php echo $smp['nama_smp'];?>"><?php echo $smp['nama_smp'];?></option>
+            <option value="<?php echo $smp['nama_smp'];?>"><?php echo $smp['nama_smp'];?></option>
             <?php } ?>
-    </select>
+        </select>
     </div> <!-- form-group// -->
 	<div class="form-group input-group">
 		<div class="input-group-prepend">
@@ -180,7 +180,12 @@
         <div class="input-group-prepend">
 		    <span class="input-group-text"> <i class="fa fa-building"></i> </span>
 		 </div>
-        <input style="width:40%" name="asalsekolah" class="form-control" placeholder="Asal Sekolah" type="text">
+         <select name="asalsekolah" class="form-control select2" id="asalsekolah" style="width: 40%;">
+		    <option selected="">Ketik Untuk Mencari Sekolah Tujuan</option>
+            <?php foreach($sql_asalsekolah as $sd) { ?>
+            <option value="<?php echo $sd['namasekolah'];?>"><?php echo $sd['namasekolah'];?></option>
+            <?php } ?>
+        </select>
         
     </div> <!-- form-group// -->
             

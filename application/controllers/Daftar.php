@@ -40,7 +40,7 @@ class Daftar extends CI_Controller{
             else 
             {
                 $data['error'] = TRUE;
-                $data['msg'] = "<strong>NISNxx Anda Tidak Ditemukan di Database Kami!</strong><br /> Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a> Untuk Memverifikasi NISN Anda.";
+                $data['msg'] = "<strong>NISN Anda Tidak Ditemukan di Database Kami!</strong><br /> Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a> Untuk Memverifikasi NISN Anda.";
             }
         }
         $this->load->view('daftar/ceknisn',$data);
@@ -99,6 +99,7 @@ class Daftar extends CI_Controller{
                 $data['sql_kabupaten'] = $this->db->query('SELECT * FROM wilayah_2020 WHERE CHAR_LENGTH(kode)=5 AND LEFT(kode,2)=92 ORDER BY nama ASC')->result_array();
                 $data['sql_pekerjaan'] = $this->db->query('SELECT * FROM tbl_pekerjaan ORDER BY pekerjaan ASC')->result_array();
                 $data['sql_sekolahtujuan'] = $this->db->query('SELECT * FROM tbl_sekolahtujuan ORDER BY nama_smp ASC')->result_array();
+                $data['sql_asalsekolah'] = $this->db->query('SELECT * FROM tbl_sekolahdasar ORDER BY namasekolah ASC')->result_array();
                 $this->load->view('daftar/isidata',$data);
             }
         }
