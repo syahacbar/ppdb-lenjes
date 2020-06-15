@@ -163,7 +163,7 @@ class Daftar extends CI_Controller{
             );
 
             $this->Daftar_model->save_pendaftar($params);  
-            $this->Daftar_model->delete_pendaftar_temp($data['pendaftar']['nisn']);     
+            //$this->Daftar_model->delete_pendaftar_temp($data['pendaftar']['nisn']);     
             $this->session->set_userdata('nopendaftaran', $nopendaftaran); 
             redirect('daftar/formpdf');        
             header('Location: http://103.125.7.51/'); 
@@ -197,7 +197,7 @@ class Daftar extends CI_Controller{
         $desa = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['kodealamat'].'",13)')->row_array();
         
         $this->load->library('pdf');
-        $html_content = '<img src="'.base_url('resources/themes/regform1/images/headerform.jpg').'" width="100%"><div style="font-size:22px; font-weight:bold; text-align:center; text-decoration:underline">Formulir Penerimaan Peserta Didik Baru</div>
+        $html_content = '<html><head><title>'.$nopendaftaran.'</title></head><body><img src="'.base_url('resources/themes/regform1/images/headerform.jpg').'" width="100%"><div style="font-size:22px; font-weight:bold; text-align:center; text-decoration:underline">Formulir Penerimaan Peserta Didik Baru</div>
         <div style="font-size:16px; font-weight:bold; text-align:center;">No. Pendaftaran: '.$nopendaftaran.' </div>
         <br/><br/>
         <table align="center" width="90%">
@@ -244,12 +244,11 @@ class Daftar extends CI_Controller{
         <td>Tanggal Mendaftar</td><td width="10">:</td><td>'.$data['tgldaftar'].'</td>
         </tr>
         </table>
-        ';
+        </body></html>';
         
-        //$html_content .= 'tesss';
 		$this->pdf->loadHtml($html_content);
 		$this->pdf->render();
-		$this->pdf->stream("tes.pdf", array("Attachment"=>0));
+		$this->pdf->stream("Formulir Pendaftaran ".$nopendaftaran.".pdf", array("Attachment"=>0));
     }
     function getKabupaten()
     {
