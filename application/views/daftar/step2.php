@@ -304,7 +304,7 @@
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
-                                    <input class="input--style-1" type="file" placeholder="Nomor HP" name="filefoto">
+                                    <input class="input--style-1" type="file" placeholder="Pas Foto" name="filefoto">
                                 </div>
                             </div>
                         </div>  

@@ -97,6 +97,22 @@ class Daftar extends CI_Controller{
                     'alamatlengkap' => $this->input->post('alamatlengkap'),
                     'kodealamat' => $this->input->post('desa'),
                 );
+                //upload foto
+
+                $config['upload_path'] = './filefoto/';
+                $config['allowed_types'] = 'gif|jpg|png'; 
+                $config['file_name'] = $nisn;  
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('filefoto')) {
+                    $error = $this->upload->display_errors();
+                    print_r($error);
+                } else {
+                    $result = $this->upload->data();
+                    echo "<pre>";
+                    print_r($result);
+                    echo "</pre>";
+                }
+
 
                 $this->Daftar_model->save_casis_temp($params);            
                 redirect('daftar/step3');
@@ -114,6 +130,24 @@ class Daftar extends CI_Controller{
             show_error('The pendaftar you are trying to edit does not exist.');
         } else {
             redirect('daftar/step1');
+        }
+    }
+
+    function do_upload_foto() {
+        // setting konfigurasi upload
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        // load library upload
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload('gambar')) {
+            $error = $this->upload->display_errors();
+            // menampilkan pesan error
+            print_r($error);
+        } else {
+            $result = $this->upload->data();
+            echo "<pre>";
+            print_r($result);
+            echo "</pre>";
         }
     }
 
