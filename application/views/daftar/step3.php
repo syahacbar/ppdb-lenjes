@@ -34,6 +34,7 @@
                     <div style="font-size:22px; font-weight:bold; text-align:center; text-decoration:underline">Formulir Penerimaan Peserta Didik Baru</div>
                     <div style="font-size:16px; font-weight:bold; text-align:center;"><?php echo "No. Pendaftaran: ".$nopendaftaran;?></div>
                     <br />
+                   <center> <img width=150 height=200 src="<?php echo $pendaftar['filefoto']?>"></center>
                     <form method="POST"  action="<?php echo base_url('daftar/step3');?>" enctype="multipart/form-data">                    
                     <div class="row row-space">
                         <div class="col-2">
@@ -129,7 +130,7 @@
                         <input readonly name="tgldaftar" class="input--style-1"  type="text" value="<?php echo 'Tanggal Mendaftar : '.$pendaftar['tgldaftar'];?>">
                     </div>
                     <div style="color:red;">Dengan ini saya menyatakan akan melakukan pendaftaran peserta didik baru</div>
-
+                    <br/>
                         <div class="row row-space">
                             <div class="col-2">
                                 <a href="<?php echo base_url('daftar/step2');?>" class="btn btn--radius"  style="text-decoration:none; background: #c10606;">

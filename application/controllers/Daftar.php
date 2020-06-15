@@ -77,6 +77,17 @@ class Daftar extends CI_Controller{
 		
 			if($this->form_validation->run())     
             {   
+                $config['upload_path'] = './filefoto/';
+                $config['allowed_types'] = 'gif|jpg|png'; 
+                $config['file_name'] = $nisn;  
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('filefoto')) {
+                    $error = $this->upload->display_errors();
+                    print_r($error);
+                } else {
+                    $result = $this->upload->data();
+                }
+
                 $params = array(					
                     'namaayah' => $this->input->post('namaayah'),
                     'namaibu' => $this->input->post('namaibu'),
@@ -86,7 +97,7 @@ class Daftar extends CI_Controller{
                     'asalsekolah' => $this->input->post('asalsekolah'),
                     'sekolahtujuan' => $this->input->post('sekolahtujuan'),
                     'tgldaftar' => $this->input->post('tgldaftar'),
-                    'filefoto' => $this->input->post('filefoto'),
+                    'filefoto' => base_url('filefoto/').$result['file_name'],
                     'nisn' => $this->input->post('nisn'),
                     'nik' => $this->input->post('nik'),
                     'namapendaftar' => $this->input->post('namapendaftar'),
@@ -97,22 +108,6 @@ class Daftar extends CI_Controller{
                     'alamatlengkap' => $this->input->post('alamatlengkap'),
                     'kodealamat' => $this->input->post('desa'),
                 );
-                //upload foto
-
-                $config['upload_path'] = './filefoto/';
-                $config['allowed_types'] = 'gif|jpg|png'; 
-                $config['file_name'] = $nisn;  
-                $this->load->library('upload', $config);
-                if (!$this->upload->do_upload('filefoto')) {
-                    $error = $this->upload->display_errors();
-                    print_r($error);
-                } else {
-                    $result = $this->upload->data();
-                    echo "<pre>";
-                    print_r($result);
-                    echo "</pre>";
-                }
-
 
                 $this->Daftar_model->save_casis_temp($params);            
                 redirect('daftar/step3');
@@ -133,23 +128,7 @@ class Daftar extends CI_Controller{
         }
     }
 
-    function do_upload_foto() {
-        // setting konfigurasi upload
-        $config['upload_path'] = './uploads/';
-        $config['allowed_types'] = 'gif|jpg|png';
-        // load library upload
-        $this->load->library('upload', $config);
-        if (!$this->upload->do_upload('gambar')) {
-            $error = $this->upload->display_errors();
-            // menampilkan pesan error
-            print_r($error);
-        } else {
-            $result = $this->upload->data();
-            echo "<pre>";
-            print_r($result);
-            echo "</pre>";
-        }
-    }
+    
 
     function step3()
     {
@@ -236,7 +215,7 @@ class Daftar extends CI_Controller{
         <br/><br/>
         <table align="center" width="90%">
         <tr>
-        <td width="100">NISN</td><td width="10">:</td><td width="300">'.$data['nisn'].'</td><td rowspan=6><img width=150 height=200 src="'.base_url('resources/themes/regform1/images/siswa.jpg').'"</td>
+        <td width="100">NISN</td><td width="10">:</td><td width="300">'.$data['nisn'].'</td><td rowspan=6><img width=150 height=200 src="'.$data['filefoto'].'"></td>
         </tr>
         <tr>
         <td>NIK</td><td width="10">:</td><td>'.$data['nik'].'</td>
@@ -257,13 +236,16 @@ class Daftar extends CI_Controller{
         <td>Alamat</td><td width="10">:</td><td>'.$data['alamatlengkap'].'<br/>'.$desa['nama'].', '.$distrik['nama'].'<br/>'.$kabupaten['nama'].', '.$provinsi['nama'].'</td>
         </tr>
         <tr>
-        <td>Nama Ayah</td><td width="10">:</td><td>'.$data['namaayah'].'&nbsp;&nbsp;&nbsp;&nbsp; Pekerjaan : '.$data['pekerjaanayah'].'</td>
+        <td>Nama Ayah</td><td width="10">:</td><td>'.$data['namaayah'].'</td>
         </tr>
         <tr>
-        <td>Nama Ibu</td><td width="10">:</td><td>'.$data['namaibu'].'&nbsp;&nbsp;&nbsp;&nbsp; Pekerjaan : '.$data['pekerjaanibu'].'</td>
+        <td>Pekerjaan Ayah</td><td width="10">:</td><td>'.$data['pekerjaanayah'].'</td>
         </tr>
         <tr>
-        <td>Nama Ayah</td><td width="10">:</td><td>'.$data['namaayah'].'&nbsp;&nbsp;&nbsp;&nbsp; Pekerjaan : '.$data['pekerjaanayah'].'</td>
+        <td>Nama Ibu</td><td width="10">:</td><td>'.$data['namaibu'].'</td>
+        </tr>
+        <tr>
+        <td>Pekerjaan Ibu</td><td width="10">:</td><td>'.$data['pekerjaanibu'].'</td>
         </tr>
         <tr>
         <td>Nomor HP</td><td width="10">:</td><td>'.$data['nomorhp'].'</td>
