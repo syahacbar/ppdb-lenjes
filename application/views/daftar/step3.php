@@ -130,9 +130,16 @@
                     </div>
                     <div style="color:red;">Dengan ini saya menyatakan akan melakukan pendaftaran peserta didik baru</div>
 
-                        <div class="p-t-20">
-                            <button name="btnKonfirmasi" class="btn btn--radius btn--green" type="submit">Daftar</button>
-                        </div>
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <a href="<?php echo base_url('daftar/step2');?>" class="btn btn--radius"  style="text-decoration:none; background: #c10606;">
+                                    Kembali
+                                </a>
+                            </div>
+                            <div class="col-2">
+                                <button name="btnKonfirmasi" class="btn btn--radius btn--green" type="submit">Daftar</button>
+                            </div>
+                        </div> 
                     </form>
                 </div>
             </div>
