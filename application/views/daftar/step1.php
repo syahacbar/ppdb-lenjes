@@ -32,7 +32,7 @@
             <div class="card card-1">
                 <div class="card-heading"></div>
                 <div class="card-body">
-                    <h2 class="title">Daftar Menggunakan NISN</h2>
+                    <h3 class="title">Daftar Menggunakan NISN</h3>
                     <form method="POST" action="<?php echo base_url('daftar/step1');?>">
                     
                     <?php if(isset($error) && $error == TRUE) { ?>

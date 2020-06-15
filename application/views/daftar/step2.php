@@ -32,7 +32,7 @@
             <div class="card card-1">
                 <div class="card-heading"></div>
                 <div class="card-body">
-                    <h2 class="title">Formulir Penerimaan Peserta Didik Baru</h2>
+                    <h3 class="title">Formulir Penerimaan Peserta Didik Baru</h3>
                     <form method="POST"  action="<?php echo base_url('daftar/step2');?>" enctype="multipart/form-data">
                     <input name="nisn" type="hidden" value="<?php echo $casis['nisn'];?>">
                     <input name="tgldaftar" type="hidden" value="<?php echo date('Y-m-d H:i:s')?>">
