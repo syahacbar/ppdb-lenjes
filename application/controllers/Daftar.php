@@ -49,57 +49,16 @@ class Daftar extends CI_Controller{
     
     function step2()
     {
-        $data['sql_provinsi'] = $this->db->query('SELECT * FROM wilayah_2020 WHERE CHAR_LENGTH(kode)=2 ORDER BY nama ASC')->result_array();
-        $data['sql_pekerjaan'] = $this->db->query('SELECT * FROM tbl_pekerjaan ORDER BY pekerjaan ASC')->result_array();
-        $data['sql_sekolahtujuan'] = $this->db->query('SELECT * FROM tbl_sekolahtujuan ORDER BY nama_smp ASC')->result_array();
-        $data['sql_asalsekolah'] = $this->db->query('SELECT * FROM tbl_sekolahdasar ORDER BY namasekolah ASC')->result_array();
-        $this->load->view('daftar/step2',$data);
-    }
-
-    function step3()
-    {
-        $this->load->view('daftar/step3');
-    }
-
-    function ceknisn()
-    {
-        $nisn =  $this->input->post('nisn');
-        $data['casis'] = $this->Daftar_model->get_casis($nisn);
-        $data['pendaftar'] = $this->Daftar_model->get_pendaftar($nisn);
-        if($_POST) {
-            if($nisn=='' || !isset($nisn))
-            {
-                $data['error'] = TRUE;
-                $data['msg'] = "<strong>Anda Harus Memasukkan NISN</strong> untuk melanjutkan proses pendaftaran ini";
-            }
-            else if(isset($data['pendaftar']['nisn'])) 
-            {
-                $data['error'] = TRUE;
-                $data['msg'] = "<strong>NISN Anda Sudah Digunakan Untuk Mendaftar Sebagai Calon Siswa Baru!</strong><br />Jika anda tidak merasa mendaftarkannya, Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a>";
-            }
-            else if(isset($data['casis']['nisn']))
-            {
-                $this->session->set_userdata('nisn', $nisn);
-                redirect('daftar/isidata');
-            } 
-            
-            else 
-            {
-                $data['error'] = TRUE;
-                $data['msg'] = "<strong>NISN Anda Tidak Ditemukan di Database Kami!</strong><br /> Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a> Untuk Memverifikasi NISN Anda.";
-            }
-        }
-        $this->load->view('daftar/ceknisn',$data);
-    }
-    function isidata()
-    {
-        //Periksa NISN di database
+        if ($this->session->userdata('nisn')) {
         $nisn =  $this->session->userdata('nisn');
         $data['casis'] = $this->Daftar_model->get_casis($nisn);
+
         if(isset($data['casis']['nisn']))
         {
+            
             $this->load->library('form_validation');
             $this->form_validation->set_rules('nisn','NISN','required');
+            
             $this->form_validation->set_rules('desa','Alamat Kab/Kota/Distrik/Desa','required');
             $this->form_validation->set_rules('namaayah','Nama Ayah','required');
             $this->form_validation->set_rules('alamatlengkap','Alamat Lengkap','required');
@@ -113,6 +72,7 @@ class Daftar extends CI_Controller{
             $this->form_validation->set_rules('pekerjaanibu','Pekerjaanibu','required');
             $this->form_validation->set_rules('pekerjaanayah','Pekerjaanayah','required');
             $this->form_validation->set_rules('namaibu','Namaibu','required');
+            
 		
 			if($this->form_validation->run())     
             {   
@@ -138,22 +98,84 @@ class Daftar extends CI_Controller{
                 );
 
                 $this->Daftar_model->save_casis_temp($params);            
-                redirect('daftar/konfirmasidata');
+                redirect('daftar/step3');
             }
             else
             {
-                $data['sql_kabupaten'] = $this->db->query('SELECT * FROM wilayah_2020 WHERE CHAR_LENGTH(kode)=5 AND LEFT(kode,2)=92 ORDER BY nama ASC')->result_array();
+                $data['sql_provinsi'] = $this->db->query('SELECT * FROM wilayah_2020 WHERE CHAR_LENGTH(kode)=2 ORDER BY nama ASC')->result_array();
                 $data['sql_pekerjaan'] = $this->db->query('SELECT * FROM tbl_pekerjaan ORDER BY pekerjaan ASC')->result_array();
                 $data['sql_sekolahtujuan'] = $this->db->query('SELECT * FROM tbl_sekolahtujuan ORDER BY nama_smp ASC')->result_array();
                 $data['sql_asalsekolah'] = $this->db->query('SELECT * FROM tbl_sekolahdasar ORDER BY namasekolah ASC')->result_array();
-                $this->load->view('daftar/isidata',$data);
+                $this->load->view('daftar/step2',$data);
             }
         }
         else
             show_error('The pendaftar you are trying to edit does not exist.');
-    
-        
+        } else {
+            redirect('daftar/step1');
+        }
     }
+
+    function step3()
+    {
+        $nisn =  $this->session->userdata('nisn');
+        $data['pendaftar'] = $this->Daftar_model->get_pendaftar_temp($nisn);
+        $smp = $this->Daftar_model->get_smp($data['pendaftar']['sekolahtujuan']);
+        $x = $this->Daftar_model->get_pendaftar_by_smp($data['pendaftar']['sekolahtujuan'])->num_rows();
+    
+            if($x <= 0) 
+            {
+                $nopendaftaran = date('Y').'-'.$smp['kode_smp'].'-001';
+            } 
+            elseif($x <= 9)
+            {
+                $nopendaftaran = date('Y').'-'.$smp['kode_smp'].'-00'.$x;
+            } 
+            elseif($x < 99)
+            {
+                $nopendaftaran = date('Y').'-'.$smp['kode_smp'].'-0'.$x;
+            }
+
+
+        if(isset($_POST['btnKonfirmasi'])){           
+            
+            $params = array(					
+                'namaayah' => $data['pendaftar']['namaayah'],
+                'namaibu' => $data['pendaftar']['namaibu'],
+                'pekerjaanayah' => $data['pendaftar']['pekerjaanayah'],
+                'pekerjaanibu' => $data['pendaftar']['pekerjaanibu'],
+                'nomorhp' => $data['pendaftar']['nomorhp'],
+                'asalsekolah' => $data['pendaftar']['asalsekolah'],
+                'sekolahtujuan' => $data['pendaftar']['sekolahtujuan'],
+                'tgldaftar' => $data['pendaftar']['tgldaftar'],
+                'filefoto' => $data['pendaftar']['filefoto'],
+                'nisn' => $data['pendaftar']['nisn'],
+                'nik' => $data['pendaftar']['nik'],
+                'namapendaftar' => $data['pendaftar']['namapendaftar'],
+                'tempatlahir' => $data['pendaftar']['tempatlahir'],
+                'tgllahir' => $data['pendaftar']['tgllahir'],
+                'jenkel' => $data['pendaftar']['jenkel'],
+                'agama' => $data['pendaftar']['agama'],
+                'alamatlengkap' => $data['pendaftar']['alamatlengkap'],
+                'kodealamat' => $data['pendaftar']['kodealamat'],
+                'nopendaftaran' => $nopendaftaran
+            );
+
+            $this->Daftar_model->save_pendaftar($params);  
+            $this->Daftar_model->delete_pendaftar_temp($data['pendaftar']['nisn']);      
+            header('Location: http://103.125.7.51/'); 
+        }
+
+        $data['nopendaftaran'] = $nopendaftaran;
+        $data['pendaftar'] = $this->Daftar_model->get_pendaftar_temp($nisn);
+        $data['provinsi'] = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['pendaftar']['kodealamat'].'",2)')->row_array();
+        $data['kabupaten'] = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['pendaftar']['kodealamat'].'",5)')->row_array();
+        $data['distrik'] = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['pendaftar']['kodealamat'].'",8)')->row_array();
+        $data['desa'] = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['pendaftar']['kodealamat'].'",13)')->row_array();
+        $this->load->view('daftar/step3',$data);
+    }
+
+    
 
     function konfirmasidata()
     {
@@ -194,7 +216,7 @@ class Daftar extends CI_Controller{
 
     function getKabupaten()
     {
-        $id_provinsi = $this->input->post('id_provinsi');
+        $id_provinsi = ($this->input->post('id_provinsi')) ? $this->input->post('id_provinsi') : $this->input->post('provinsi');
         $getKabupaten = $this->db->query('SELECT * FROM wilayah_2020 WHERE CHAR_LENGTH(kode)=5 AND LEFT(kode,2)= "'.$id_provinsi.'" ORDER BY nama ASC')->result_array();
         echo '<option disabled="disabled" selected="">Pilih Kabupaten/Kota</option>';
         foreach ($getKabupaten as $kab) {

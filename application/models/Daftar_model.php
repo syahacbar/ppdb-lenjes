@@ -40,4 +40,20 @@ class Daftar_model extends CI_Model
         $this->db->insert('tbl_pendaftar',$params);
         return $this->db->insert_id();
     }
+
+    function get_smp($nama_smp)
+    {
+        return $this->db->get_where('tbl_sekolahtujuan',array('nama_smp'=>$nama_smp))->row_array();
+    }
+
+    function get_pendaftar_by_smp($nama_smp)
+    {
+        $query = $this->db->query("SELECT * FROM tbl_pendaftar a JOIn tbl_sekolahtujuan b ON b.nama_smp=a.sekolahtujuan WHERE a.sekolahtujuan='$nama_smp'");
+        return $query;
+    }
+
+    function delete_pendaftar_temp($nisn)
+    {
+        return $this->db->delete('tbl_pendaftar_temp',array('nisn'=>$nisn));
+    }
 }

@@ -34,14 +34,15 @@
                 <div class="card-body">
                     <h2 class="title">Daftar Menggunakan NISN</h2>
                     <form method="POST" action="<?php echo base_url('daftar/step1');?>">
-                        <div class="input-group">
-                            <input value="<?php echo $this->input->post('nisn'); ?>" class="input--style-1" type="text" placeholder="Masukkan NISN" name="nisn">
-                        </div>
-                        <?php if(isset($error) && $error == TRUE) { ?>
+                    
+                    <?php if(isset($error) && $error == TRUE) { ?>
                         <div style="color:red;">
                             <?php echo $msg; ?> 
                         </div> 
-                        <?php } ?>   
+                        <?php } ?>  
+                        <div class="input-group">
+                            <input value="<?php echo $this->input->post('nisn'); ?>" class="input--style-1" type="text" placeholder="Masukkan NISN" name="nisn">
+                        </div> 
                         <div class="p-t-20">
                             <button class="btn btn--radius btn--green" type="submit">Selanjutnya</button>
                         </div>
