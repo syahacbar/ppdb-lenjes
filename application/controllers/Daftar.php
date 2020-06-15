@@ -165,7 +165,7 @@ class Daftar extends CI_Controller{
             $this->Daftar_model->delete_pendaftar_temp($data['pendaftar']['nisn']);     
             $this->session->set_userdata('nopendaftaran', $nopendaftaran); 
             redirect('daftar/formpdf');        
-            //header('Location: http://103.125.7.51/'); 
+            header('Location: http://103.125.7.51/'); 
         }
 
         $data['nopendaftaran'] = $nopendaftaran;
