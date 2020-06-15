@@ -43,9 +43,18 @@
                         <div class="input-group">
                             <input value="<?php echo $this->input->post('nisn'); ?>" class="input--style-1" type="text" placeholder="Masukkan NISN" name="nisn">
                         </div> 
-                        <div class="p-t-20">
-                            <button class="btn btn--radius btn--green" type="submit">Selanjutnya</button>
+                        
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <a href="http://103.125.7.51" class="btn btn--radius"  style="text-decoration:none;background: #c10606;">
+                                    Batal
+                                </a>
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn--radius btn--green" type="submit">Selanjutnya</button>
+                            </div>
                         </div>
+
                     </form>
                 </div>
             </div>

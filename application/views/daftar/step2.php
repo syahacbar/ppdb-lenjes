@@ -327,8 +327,15 @@
                                 <div class="select-dropdown"></div>
                             </div>
                         </div>
-                        <div class="p-t-20">
-                            <button class="btn btn--radius btn--green" type="submit">Selanjutnya</button>
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <a href="<?php echo base_url('daftar');?>" class="btn btn--radius"  style="text-decoration:none; background: #c10606;">
+                                    Kembali
+                                </a>
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn--radius btn--green" type="submit">Selanjutnya</button>
+                            </div>
                         </div>
                     </form>
                 </div>
