@@ -45,14 +45,11 @@
                         </div> 
                         
                         <div class="row row-space">
-                            <div class="col-2">
                                 <a href="http://103.125.7.51" class="btn btn--radius"  style="text-decoration:none;background: #c10606;">
                                     Batal
                                 </a>
-                            </div>
-                            <div class="col-2">
                                 <button class="btn btn--radius btn--green" type="submit">Selanjutnya</button>
-                            </div>
+                            
                         </div>
 
                     </form>

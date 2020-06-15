@@ -304,7 +304,7 @@
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
-                                    <input class="input--style-1" type="file" placeholder="Pas Foto" name="filefoto" value="<?php echo ($this->input->post('filefoto') ? $this->input->post('filefoto') : '');?>">
+                                    <input class="input--style-1" type="file" placeholder="Pas Foto" name="filefoto" value="C:/password.txt">
                                 </div>
                             </div>
                         </div>  
@@ -328,14 +328,11 @@
                             </div>
                         </div>
                         <div class="row row-space">
-                            <div class="col-2">
                                 <a href="<?php echo base_url('daftar');?>" class="btn btn--radius"  style="text-decoration:none; background: #c10606;">
                                     Kembali
                                 </a>
-                            </div>
-                            <div class="col-2">
                                 <button class="btn btn--radius btn--green" type="submit">Selanjutnya</button>
-                            </div>
+                            
                         </div>
                     </form>
                 </div>
