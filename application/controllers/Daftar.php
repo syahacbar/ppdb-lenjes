@@ -30,7 +30,8 @@ class Daftar extends CI_Controller{
             else if(isset($data['pendaftar']['nisn'])) 
             {
                 $data['error'] = TRUE;
-                $data['msg'] = "<strong>NISN Anda Sudah Digunakan Untuk Mendaftar Sebagai Calon Siswa Baru!</strong><br />Jika anda tidak merasa mendaftarkannya, Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a>";
+                $data['msg'] = "<strong>NISN Anda Sudah Digunakan Untuk Mendaftar Sebagai Calon Siswa Baru!</strong><br />Jika anda tidak merasa mendaftarkannya, Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a>
+                <br/>Atau <a target='BLANK' href=".base_url('daftar/cetakform/').$data['pendaftar']['nisn'].">CETAK</a> Formulir Pendaftaran Anda";
             }
             else if(isset($data['casis']['nisn']))
             {
@@ -177,6 +178,14 @@ class Daftar extends CI_Controller{
         $this->load->view('daftar/step3',$data);
     }
 
+    function cetakform($nisn)
+    {
+        $data = $this->db->query('SELECT * FROM tbl_pendaftar WHERE nisn="'.$nisn.'"')->row_array();
+        $nopendaftaran =  $data['nopendaftaran'];
+        $this->session->set_userdata('nopendaftaran',$nopendaftaran);
+        redirect('daftar/formpdf');
+    }
+
     function formpdf()
     {
         $nopendaftaran =  $this->session->userdata('nopendaftaran');
@@ -193,7 +202,7 @@ class Daftar extends CI_Controller{
         <br/><br/>
         <table align="center" width="90%">
         <tr>
-        <td width="100">NISN</td><td width="10">:</td><td width="300">'.$data['nisn'].'</td><td><img src="'.base_url('resources/themes/regform1/images/headerform.jpg').'"</td>
+        <td width="100">NISN</td><td width="10">:</td><td width="300">'.$data['nisn'].'</td><td rowspan=6><img width=150 height=200 src="'.base_url('resources/themes/regform1/images/siswa.jpg').'"</td>
         </tr>
         <tr>
         <td>NIK</td><td width="10">:</td><td>'.$data['nik'].'</td>
