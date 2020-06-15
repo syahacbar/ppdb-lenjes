@@ -13,7 +13,7 @@ class Daftar extends CI_Controller{
      */
     function index()
     {
-        $this->load->view('daftar/index');
+        redirect('daftar/step1');
     } 
 
     function step1()
@@ -162,8 +162,10 @@ class Daftar extends CI_Controller{
             );
 
             $this->Daftar_model->save_pendaftar($params);  
-            $this->Daftar_model->delete_pendaftar_temp($data['pendaftar']['nisn']);      
-            header('Location: http://103.125.7.51/'); 
+            $this->Daftar_model->delete_pendaftar_temp($data['pendaftar']['nisn']);     
+            $this->session->set_userdata('nopendaftaran', $nopendaftaran); 
+            redirect('daftar/formpdf');        
+            //header('Location: http://103.125.7.51/'); 
         }
 
         $data['nopendaftaran'] = $nopendaftaran;
@@ -175,45 +177,71 @@ class Daftar extends CI_Controller{
         $this->load->view('daftar/step3',$data);
     }
 
-    
-
-    function konfirmasidata()
+    function formpdf()
     {
-        $nisn =  $this->session->userdata('nisn');
+        $nopendaftaran =  $this->session->userdata('nopendaftaran');
         
-        if(isset($_POST['btnKonfirmasi'])){
-            $data['pendaftar'] = $this->Daftar_model->get_pendaftar_temp($nisn);
-            $params = array(					
-                'namaayah' => $data['pendaftar']['namaayah'],
-                'namaibu' => $data['pendaftar']['namaibu'],
-                'pekerjaanayah' => $data['pendaftar']['pekerjaanayah'],
-                'pekerjaanibu' => $data['pendaftar']['pekerjaanibu'],
-                'nomorhp' => $data['pendaftar']['nomorhp'],
-                'asalsekolah' => $data['pendaftar']['asalsekolah'],
-                'sekolahtujuan' => $data['pendaftar']['sekolahtujuan'],
-                'tgldaftar' => $data['pendaftar']['tgldaftar'],
-                'filefoto' => $data['pendaftar']['filefoto'],
-                'nisn' => $data['pendaftar']['nisn'],
-                'nik' => $data['pendaftar']['nik'],
-                'namapendaftar' => $data['pendaftar']['namapendaftar'],
-                'tempatlahir' => $data['pendaftar']['tempatlahir'],
-                'tgllahir' => $data['pendaftar']['tgllahir'],
-                'jenkel' => $data['pendaftar']['jenkel'],
-                'agama' => $data['pendaftar']['agama'],
-                'alamatlengkap' => $data['pendaftar']['alamatlengkap'],
-                'kodealamat' => $data['pendaftar']['kodealamat'],
-            );
-
-            $this->Daftar_model->save_pendaftar($params);       
-            redirect('daftar/ceknisn');
-        }
-        $data['pendaftar'] = $this->Daftar_model->get_pendaftar_temp($nisn);
-        $data['kabupaten'] = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['pendaftar']['kodealamat'].'",5)')->row_array();
-        $data['distrik'] = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['pendaftar']['kodealamat'].'",8)')->row_array();
-        $data['desa'] = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['pendaftar']['kodealamat'].'",13)')->row_array();
-        $this->load->view('daftar/konfirmasidata',$data);
+        $data = $this->db->query('SELECT * FROM tbl_pendaftar WHERE nopendaftaran="'.$nopendaftaran.'"')->row_array();
+        $provinsi = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['kodealamat'].'",2)')->row_array();
+        $kabupaten = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['kodealamat'].'",5)')->row_array();
+        $distrik = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['kodealamat'].'",8)')->row_array();
+        $desa = $this->db->query('SELECT nama FROM wilayah_2020 WHERE kode=LEFT("'.$data['kodealamat'].'",13)')->row_array();
+        
+        $this->load->library('pdf');
+        $html_content = '<img src="'.base_url('resources/themes/regform1/images/headerform.jpg').'" width="100%"><div style="font-size:22px; font-weight:bold; text-align:center; text-decoration:underline">Formulir Penerimaan Peserta Didik Baru</div>
+        <div style="font-size:16px; font-weight:bold; text-align:center;">No. Pendaftaran: '.$nopendaftaran.' </div>
+        <br/><br/>
+        <table align="center" width="90%">
+        <tr>
+        <td width="100">NISN</td><td width="10">:</td><td width="300">'.$data['nisn'].'</td><td><img src="'.base_url('resources/themes/regform1/images/headerform.jpg').'"</td>
+        </tr>
+        <tr>
+        <td>NIK</td><td width="10">:</td><td>'.$data['nik'].'</td>
+        </tr>
+        <tr>
+        <td>Nama </td><td width="10">:</td><td>'.$data['namapendaftar'].'</td>
+        </tr>
+        <tr>
+        <td>Tempat Tgl. Lahir</td><td width="10">:</td><td>'.$data['tempatlahir'].', '.$data['tgllahir'].'</td>
+        </tr>
+        <tr>
+        <td>Jenis Kelamin</td><td width="10">:</td><td>'.$data['jenkel'].'</td>
+        </tr>
+        <tr>
+        <td>Agama</td><td width="10">:</td><td>'.$data['agama'].'</td>
+        </tr>
+        <tr style="vertical-align:top;">
+        <td>Alamat</td><td width="10">:</td><td>'.$data['alamatlengkap'].'<br/>'.$desa['nama'].', '.$distrik['nama'].'<br/>'.$kabupaten['nama'].', '.$provinsi['nama'].'</td>
+        </tr>
+        <tr>
+        <td>Nama Ayah</td><td width="10">:</td><td>'.$data['namaayah'].'&nbsp;&nbsp;&nbsp;&nbsp; Pekerjaan : '.$data['pekerjaanayah'].'</td>
+        </tr>
+        <tr>
+        <td>Nama Ibu</td><td width="10">:</td><td>'.$data['namaibu'].'&nbsp;&nbsp;&nbsp;&nbsp; Pekerjaan : '.$data['pekerjaanibu'].'</td>
+        </tr>
+        <tr>
+        <td>Nama Ayah</td><td width="10">:</td><td>'.$data['namaayah'].'&nbsp;&nbsp;&nbsp;&nbsp; Pekerjaan : '.$data['pekerjaanayah'].'</td>
+        </tr>
+        <tr>
+        <td>Nomor HP</td><td width="10">:</td><td>'.$data['nomorhp'].'</td>
+        </tr>
+        <tr>
+        <td>Asal Sekolah</td><td width="10">:</td><td>'.$data['asalsekolah'].'</td>
+        </tr>
+        <tr>
+        <td>Pilihan Sekolah</td><td width="10">:</td><td>'.$data['sekolahtujuan'].'</td>
+        </tr>
+        <tr>
+        <td>Tanggal Mendaftar</td><td width="10">:</td><td>'.$data['tgldaftar'].'</td>
+        </tr>
+        </table>
+        ';
+        
+        //$html_content .= 'tesss';
+		$this->pdf->loadHtml($html_content);
+		$this->pdf->render();
+		$this->pdf->stream("tes.pdf", array("Attachment"=>0));
     }
-
     function getKabupaten()
     {
         $id_provinsi = ($this->input->post('id_provinsi')) ? $this->input->post('id_provinsi') : $this->input->post('provinsi');

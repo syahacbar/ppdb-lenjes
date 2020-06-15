@@ -78,7 +78,7 @@
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
-                                    <input id="tgllahir" value="<?php echo ($this->input->post('tgllahir') ? $this->input->post('tgllahir') : $casis['tgllahir']); ?>" class="input--style-1 js-datepicker" type="text" placeholder="Tanggal Lahir" name="tgllahir">
+                                    <input readonly id="tgllahir" value="<?php echo ($this->input->post('tgllahir') ? $this->input->post('tgllahir') : $casis['tgllahir']); ?>" class="input--style-1" type="text" placeholder="Tanggal Lahir" name="tgllahir">
                                     <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                 </div>
                             </div>
@@ -87,9 +87,11 @@
                             <div class="col-2">
                                 <div class="input-group">
                                     <div class="rs-select2 js-select-simple select--no-search">
+                                        <!--
                                         <select readonly name="jenkel" class="select2">
                                             <option disabled="disabled" selected="selected">Jenis Kelamin</option>
                                             <?php 
+                                            /*
                                                 $jk = array(
                                                     'Laki-laki'=>'Laki-laki',
                                                     'Perempuan'=>'Perempuan',
@@ -99,8 +101,11 @@
                                                     $selected = ($value == $casis['jenkel']) ? ' selected="selected"' : "";
                                                     echo '<option value="'.$value.'" '.$selected.'>'.$display_text.'</option>';
                                                 } 
+                                                */
                                             ?>
                                         </select>
+                                        -->
+                                        <input readonly value="<?php echo ($this->input->post('jenkel') ? $this->input->post('jenkel') : $casis['jenkel']); ?>" class="input--style-1" type="text" name="jenkel">
                                         <div class="select-dropdown"></div>
                                     </div>
                                 </div>
