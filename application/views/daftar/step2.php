@@ -304,7 +304,7 @@
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
-                                    <input class="input--style-1" type="file" placeholder="Pas Foto" name="filefoto">
+                                    <input class="input--style-1" type="file" placeholder="Pas Foto" name="filefoto" value="<?php echo ($this->input->post('filefoto') ? $this->input->post('filefoto') : '');?>">
                                 </div>
                             </div>
                         </div>  
