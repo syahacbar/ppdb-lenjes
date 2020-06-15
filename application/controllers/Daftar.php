@@ -22,7 +22,6 @@ class Daftar extends CI_Controller{
         $data['casis'] = $this->Daftar_model->get_casis($nisn);
         $data['pendaftar'] = $this->Daftar_model->get_pendaftar($nisn);
         if($_POST) {
-            /*
             if($nisn=='' || !isset($nisn))
             {
                 $data['error'] = TRUE;
@@ -44,15 +43,17 @@ class Daftar extends CI_Controller{
                 $data['error'] = TRUE;
                 $data['msg'] = "<strong>NISN Anda Tidak Ditemukan di Database Kami!</strong><br /> Silahkan hubungi admin <a target='BLANK' href='https://api.whatsapp.com/send?phone=6281328220562&text=Halo%20Admin%20PPDB%20Kab.%20Sorong ...'>DISINI</a> Untuk Memverifikasi NISN Anda.";
             }
-            */
-            redirect('daftar/step2')
         }
-        $this->load->view('daftar/step1');
+        $this->load->view('daftar/step1',$data);
     }
     
     function step2()
     {
-        $this->load->view('daftar/step2');
+        $data['sql_provinsi'] = $this->db->query('SELECT * FROM wilayah_2020 WHERE CHAR_LENGTH(kode)=2 ORDER BY nama ASC')->result_array();
+        $data['sql_pekerjaan'] = $this->db->query('SELECT * FROM tbl_pekerjaan ORDER BY pekerjaan ASC')->result_array();
+        $data['sql_sekolahtujuan'] = $this->db->query('SELECT * FROM tbl_sekolahtujuan ORDER BY nama_smp ASC')->result_array();
+        $data['sql_asalsekolah'] = $this->db->query('SELECT * FROM tbl_sekolahdasar ORDER BY namasekolah ASC')->result_array();
+        $this->load->view('daftar/step2',$data);
     }
 
     function step3()
@@ -191,22 +192,21 @@ class Daftar extends CI_Controller{
         $this->load->view('daftar/konfirmasidata',$data);
     }
 
-/*
     function getKabupaten()
     {
-        $id_provinsi = "91";
-        $getKabupaten = $this->db->query('SELECT * FROM wilayah_kabupaten WHERE provinsi_id = '.$id_provinsi.' ORDER BY nama ASC')->result_array();
-        echo '<option selected="">Pilih Kabupaten/Kota</option>';
+        $id_provinsi = $this->input->post('id_provinsi');
+        $getKabupaten = $this->db->query('SELECT * FROM wilayah_2020 WHERE CHAR_LENGTH(kode)=5 AND LEFT(kode,2)= "'.$id_provinsi.'" ORDER BY nama ASC')->result_array();
+        echo '<option disabled="disabled" selected="">Pilih Kabupaten/Kota</option>';
         foreach ($getKabupaten as $kab) {
-            echo '<option value="'.$kab['id'].'">'.$kab['nama'].'</option>';
+            echo '<option value="'.$kab['kode'].'">'.$kab['nama'].'</option>';
         }
     }
-*/
+
     function getDistrik()
     {
         $id_kabupaten = $this->input->post('id_kabupaten');
         $getDistrik = $this->db->query('SELECT * FROM wilayah_2020 WHERE CHAR_LENGTH(kode)=8 AND LEFT(kode,5)="'.$id_kabupaten.'" ORDER BY nama ASC')->result_array();
-        echo '<option selected="">Pilih Kecamatan/Distrik</option>';
+        echo '<option disabled="disabled" selected="">Pilih Kecamatan/Distrik</option>';
         foreach ($getDistrik as $dis) {
             echo '<option value="'.$dis['kode'].'">'.$dis['nama'].'</option>';
         }
@@ -216,7 +216,7 @@ class Daftar extends CI_Controller{
     {
         $id_distrik = $this->input->post('id_distrik');
         $getDesa = $this->db->query('SELECT * FROM wilayah_2020 WHERE CHAR_LENGTH(kode)=13 AND LEFT(kode,8) = "'.$id_distrik.'" ORDER BY nama ASC')->result_array();
-        echo '<option selected="">Pilih Kelurahan/Desa</option>';
+        echo '<option disabled="disabled" selected="">Pilih Kelurahan/Desa</option>';
         foreach ($getDesa as $des) {
             echo '<option value="'.$des['kode'].'">'.$des['nama'].'</option>';
         }

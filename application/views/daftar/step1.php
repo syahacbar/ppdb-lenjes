@@ -37,7 +37,11 @@
                         <div class="input-group">
                             <input value="<?php echo $this->input->post('nisn'); ?>" class="input--style-1" type="text" placeholder="Masukkan NISN" name="nisn">
                         </div>
-                        
+                        <?php if(isset($error) && $error == TRUE) { ?>
+                        <div style="color:red;">
+                            <?php echo $msg; ?> 
+                        </div> 
+                        <?php } ?>   
                         <div class="p-t-20">
                             <button class="btn btn--radius btn--green" type="submit">Selanjutnya</button>
                         </div>
